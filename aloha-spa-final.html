@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloha SPA - Reynosa's Luxury Sanctuary</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #E8004F;
+            --dark-brown: #3D2424;
+            --light-bg: #F8F8F8;
+            --text-dark: #2D2D2D;
+            --text-light: #BEBEBE;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-style: italic;
+            color: var(--primary-pink);
+            font-weight: 500;
+        }
+
+        .logo-spa {
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--text-dark);
+        }
+
+        .nav {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--primary-pink);
+        }
+
+        .btn-reservar {
+            background: var(--dark-brown);
+            color: var(--white);
+            padding: 16px 38px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            letter-spacing: 1.5px;
+            font-size: 13px;
+            text-transform: capitalize;
+        }
+
+        .btn-reservar:hover {
+            background: var(--primary-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(232, 0, 79, 0.35);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 100px;
+            padding: 100px 60px 120px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            background: var(--white);
+        }
+
+        .hero-content {
+            padding-right: 40px;
+        }
+
+        .subtitle {
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: var(--primary-pink);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+            position: relative;
+            padding-left: 70px;
+        }
+
+        .subtitle::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 55px;
+            height: 2px;
+            background: var(--primary-pink);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 80px;
+            line-height: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .hero-title .belleza {
+            font-style: italic;
+            font-weight: 400;
+            display: block;
+        }
+
+        .hero-title .emana {
+            color: var(--primary-pink);
+            font-weight: 700;
+            display: block;
+            font-style: normal;
+        }
+
+        .hero-title .desde {
+            font-style: italic;
+            color: var(--text-light);
+            font-weight: 400;
+            display: block;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            line-height: 1.9;
+            color: var(--text-light);
+            margin-bottom: 45px;
+            max-width: 520px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: var(--primary-pink);
+            color: var(--white);
+            padding: 20px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            font-size: 13px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary-pink);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary-pink);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(232, 0, 79, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-dark);
+            padding: 20px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            font-size: 13px;
+            text-transform: uppercase;
+            border: 2px solid var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-dark);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(61, 36, 36, 0.25);
+        }
+
+        .hero-image-container {
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 600px;
+            height: 650px;
+            border-radius: 35px;
+            object-fit: cover;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
+        }
+
+        .promo-card {
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            background: var(--white);
+            padding: 35px 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+            max-width: 380px;
+        }
+
+        .promo-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-pink);
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .promo-label::before {
+            content: "★";
+            font-size: 20px;
+        }
+
+        .promo-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 19px;
+            line-height: 1.65;
+            margin-bottom: 18px;
+            color: var(--text-dark);
+        }
+
+        .promo-author {
+            color: var(--text-light);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 140px 60px;
+            background: var(--white);
+        }
+
+        .section-header {
+            max-width: 700px;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: var(--primary-pink);
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            line-height: 1.15;
+            font-style: italic;
+            margin-bottom: 35px;
+            font-weight: 500;
+        }
+
+        .section-title .bello {
+            color: var(--primary-pink);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .section-description {
+            font-size: 16px;
+            line-height: 1.85;
+            color: var(--text-light);
+            max-width: 550px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+            max-width: 1000px;
+        }
+
+        .service-item {
+            padding: 35px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .service-left {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .service-number {
+            color: var(--text-light);
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .service-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .service-price {
+            color: var(--primary-pink);
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .cuerpo-completo {
+            margin-top: 60px;
+            background: var(--dark-brown);
+            padding: 50px 60px;
+            border-radius: 30px;
+            color: var(--white);
+            max-width: 550px;
+        }
+
+        .cuerpo-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .cuerpo-price {
+            font-size: 90px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .cuerpo-sessions {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+        }
+
+        /* Packages Section */
+        .packages {
+            padding: 140px 60px;
+            background: var(--light-bg);
+        }
+
+        .packages-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .package-card {
+            background: var(--white);
+            padding: 50px 45px;
+            border-radius: 25px;
+            transition: all 0.4s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .package-card.featured {
+            border: 2px solid var(--primary-pink);
+        }
+
+        .package-sessions {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .package-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-style: italic;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .package-price {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--primary-pink);
+            margin-bottom: 30px;
+        }
+
+        .package-features {
+            list-style: none;
+        }
+
+        .package-features li {
+            padding: 15px 0;
+            border-bottom: 1px solid #F0F0F0;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .package-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Location Section */
+        .location {
+            padding: 140px 60px;
+            background: var(--white);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .location-intro h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 62px;
+            line-height: 1.2;
+            font-style: italic;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .location-intro p {
+            font-size: 15px;
+            line-height: 1.85;
+            color: var(--text-light);
+        }
+
+        .location-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .location-card {
+            background: var(--light-bg);
+            padding: 35px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .location-card:hover {
+            background: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .location-card-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .location-card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .location-card-arrow {
+            float: right;
+            color: var(--primary-pink);
+            font-size: 22px;
+        }
+
+        .ubicacion-box {
+            background: var(--dark-brown);
+            padding: 50px;
+            border-radius: 25px;
+            color: var(--white);
+        }
+
+        .ubicacion-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .ubicacion-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .ubicacion-address {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .ubicacion-link {
+            color: var(--primary-pink);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ubicacion-link:hover {
+            gap: 15px;
+            transition: gap 0.3s;
+        }
+
+        .horarios-box {
+            background: var(--light-bg);
+            padding: 50px;
+            border-radius: 25px;
+        }
+
+        .horarios-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: var(--white);
+        }
+
+        .horarios-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: var(--primary-pink);
+            font-weight: 500;
+        }
+
+        .horarios-item {
+            margin-bottom: 25px;
+        }
+
+        .horarios-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--primary-pink);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .horarios-time {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary-pink);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--white);
+            padding: 120px 60px 50px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 100px;
+            margin-bottom: 80px;
+            max-width: 1400px;
+        }
+
+        .footer-main {
+            max-width: 450px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-style: italic;
+            color: var(--primary-pink);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .footer-logo-spa {
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .footer-description {
+            color: var(--text-light);
+            line-height: 1.9;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #E0E0E0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+
+        .social-link:hover {
+            background: var(--primary-pink);
+            border-color: var(--primary-pink);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-column h4 {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-pink);
+        }
+
+        .newsletter h4 {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .newsletter p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0;
+            position: relative;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 18px 25px;
+            border: 1px solid #E0E0E0;
+            border-radius: 50px;
+            font-size: 14px;
+            font-style: italic;
+            color: var(--text-light);
+            outline: none;
+        }
+
+        .newsletter-input:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .newsletter-submit {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--primary-pink);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid #F0F0F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-bottom-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--primary-pink);
+        }
+
+        /* Floating Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 60px;
+            height: 60px;
+            background: var(--dark-brown);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 18px;
+            z-index: 999;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(61, 36, 36, 0.3);
+            transition: all 0.3s;
+        }
+
+        .floating-btn:hover {
+            background: var(--primary-pink);
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .hero-title {
+                font-size: 65px;
+            }
+
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 30px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .hero {
+                padding: 80px 30px;
+                margin-top: 80px;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .services,
+            .packages,
+            .location,
+            .footer {
+                padding: 80px 30px;
+            }
+
+            .section-title {
+                font-size: 44px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .promo-card {
+                position: static;
+                margin-top: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Button -->
+    <div class="floating-btn">N</div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-text">Aloha</span>
+            <span class="logo-spa">SPA</span>
+        </div>
+        <nav class="nav">
+            <a href="#experiencia">EXPERIENCIA</a>
+            <a href="#laser">LÁSER</a>
+            <a href="#sedes">SEDES</a>
+            <a href="#contacto" class="btn-reservar">Reservar Ahora</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="subtitle">REYNOSA'S LUXURY SANCTUARY</p>
+            <h1 class="hero-title">
+                <span class="belleza">Belleza que</span>
+                <span class="emana">EMANA</span>
+                <span class="desde">desde el<br>alma.</span>
+            </h1>
+            <p class="hero-description">
+                Descubre el equilibrio perfecto entre tecnología avanzada y rituales de relajación. 
+                Tu oasis tropical en el corazón de la ciudad.
+            </p>
+            <div class="hero-buttons">
+                <a href="#servicios" class="btn-primary">Explorar Servicios</a>
+                <a href="#promociones" class="btn-secondary">Ver Promociones</a>
+            </div>
+        </div>
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" alt="Spa Treatment" class="hero-image">
+            <div class="promo-card">
+                <div class="promo-label">Oferta Exclusiva</div>
+                <p class="promo-text">"El regalo perfecto para este San Valentín es tiempo de paz."</p>
+                <p class="promo-author">- ALOHA TEAM</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicios">
+        <div class="section-header">
+            <p class="section-label">TECNOLOGÍA TRIODE</p>
+            <h2 class="section-title">
+                Despídete<br>del<br><span class="bello">BELLO</span>
+            </h2>
+            <p class="section-description">
+                Resultados garantizados desde la primera sesión con nuestro avanzado sistema de depilación láser. 
+                Seguro, rápido e indoloro.
+            </p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">01</span>
+                    <h3 class="service-name">Bozo</h3>
+                </div>
+                <span class="service-price">$1,100</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">02</span>
+                    <h3 class="service-name">Cara</h3>
+                </div>
+                <span class="service-price">$1,800</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">03</span>
+                    <h3 class="service-name">Axila</h3>
+                </div>
+                <span class="service-price">$1,400</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">04</span>
+                    <h3 class="service-name">Brazos</h3>
+                </div>
+                <span class="service-price">$2,200</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">05</span>
+                    <h3 class="service-name">1/2 Brazo</h3>
+                </div>
+                <span class="service-price">$1,300</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">06</span>
+                    <h3 class="service-name">Barba</h3>
+                </div>
+                <span class="service-price">$1,100</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">07</span>
+                    <h3 class="service-name">1/2 Pierna</h3>
+                </div>
+                <span class="service-price">$2,400</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">08</span>
+                    <h3 class="service-name">Glúteos</h3>
+                </div>
+                <span class="service-price">$1,900</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">09</span>
+                    <h3 class="service-name">Manos</h3>
+                </div>
+                <span class="service-price">$850</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">010</span>
+                    <h3 class="service-name">Pecho</h3>
+                </div>
+                <span class="service-price">$1,999</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">011</span>
+                    <h3 class="service-name">Abdomen</h3>
+                </div>
+                <span class="service-price">$1,950</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">012</span>
+                    <h3 class="service-name">Área Bikini</h3>
+                </div>
+                <span class="service-price">$1,950</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">013</span>
+                    <h3 class="service-name">Pierna Completa</h3>
+                </div>
+                <span class="service-price">$4,300</span>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-left">
+                    <span class="service-number">014</span>
+                    <h3 class="service-name">1/2 Pierna inferior</h3>
+                </div>
+                <span class="service-price">$2,300</span>
+            </div>
+        </div>
+
+        <div class="cuerpo-completo">
+            <div class="cuerpo-label">CUERPO COMPLETO</div>
+            <div class="cuerpo-price">$11,990</div>
+            <div class="cuerpo-sessions">12 sesiones</div>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section class="packages" id="experiencia">
+        <div class="packages-header">
+            <p class="section-label">CURATED EXPERIENCES</p>
+            <h2 class="section-title">Nuestros Paquetes</h2>
+        </div>
+        
+        <div class="packages-grid">
+            <div class="package-card">
+                <p class="package-sessions">12 SESIONES</p>
+                <h3 class="package-name">Paquete<br>Esencial</h3>
+                <div class="package-price">$3,500</div>
+                <ul class="package-features">
+                    <li>Masaje relajante</li>
+                    <li>Facial hidratante</li>
+                    <li>Aromaterapia</li>
+                    <li>Exfoliación corporal</li>
+                </ul>
+            </div>
+            
+            <div class="package-card featured">
+                <p class="package-sessions">12 SESIONES</p>
+                <h3 class="package-name">Paquete<br>Radiante</h3>
+                <div class="package-price">$5,200</div>
+                <ul class="package-features">
+                    <li>Todo del paquete Esencial</li>
+                    <li>Tratamiento facial premium</li>
+                    <li>Masaje de piedras calientes</li>
+                    <li>Reflexología</li>
+                    <li>Manicure & Pedicure</li>
+                </ul>
+            </div>
+            
+            <div class="package-card">
+                <p class="package-sessions">12 SESIONES</p>
+                <h3 class="package-name">Paquete Total</h3>
+                <div class="package-price">$6,550</div>
+                <ul class="package-features">
+                    <li>Todo del paquete Radiante</li>
+                    <li>Depilación láser completa</li>
+                    <li>Tratamiento corporal</li>
+                    <li>Sauna y vapor</li>
+                    <li>Consulta personalizada</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location" id="sedes">
+        <div class="location-grid">
+            <div class="location-intro">
+                <h2>Encuéntranos</h2>
+                <p>Visítanos en cualquiera de nuestras dos ubicaciones diseñadas para tu máximo confort.</p>
+                
+                <div class="location-cards" style="margin-top: 50px;">
+                    <div class="location-card">
+                        <p class="location-card-label">REYNOSA, TAMPS.</p>
+                        <h3 class="location-card-name">Sucursal Occidental</h3>
+                        <span class="location-card-arrow">›</span>
+                    </div>
+                    <div class="location-card">
+                        <p class="location-card-label">REYNOSA, TAMPS.</p>
+                        <h3 class="location-card-name">Sucursal Plaza Norte</h3>
+                        <span class="location-card-arrow">›</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ubicacion-box">
+                <div class="ubicacion-icon">📍</div>
+                <h3 class="ubicacion-title">Ubicación</h3>
+                <p class="ubicacion-address">
+                    Col. Granjas<br>
+                    Económicas del Norte<br>
+                    (Detrás de Café Moots)
+                </p>
+                <a href="#" class="ubicacion-link">
+                    Abrir en Google Maps
+                    <span>→</span>
+                </a>
+            </div>
+            
+            <div class="horarios-box">
+                <div class="horarios-icon">🕐</div>
+                <h3 class="horarios-title">Horarios</h3>
+                
+                <div class="horarios-item">
+                    <p class="horarios-label">LUNES A VIERNES</p>
+                    <p class="horarios-time">9:00 AM – 8:00 PM</p>
+                </div>
+                
+                <div class="horarios-item">
+                    <p class="horarios-label">DOMINGO</p>
+                    <p class="horarios-time">9:00 AM – 2:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-logo">Aloha</div>
+                <span class="footer-logo-spa">SPA</span>
+                <p class="footer-description">
+                    Creando momentos de serenidad y belleza duradera para la mujer contemporánea en Reynosa.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>NAVEGACIÓN</h4>
+                <ul class="footer-links">
+                    <li><a href="#">TRATAMIENTOS</a></li>
+                    <li><a href="#">LÁSER TRIODE</a></li>
+                    <li><a href="#">PROMOCIONES</a></li>
+                    <li><a href="#">CONTACTO</a></li>
+                </ul>
+            </div>
+            
+            <div class="newsletter">
+                <h4>NEWSLETTER</h4>
+                <p>Recibe consejos de skin-care y ofertas exclusivas.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="hello@example.com">
+                    <button type="submit" class="newsletter-submit">→</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 ALOHA SPA · REYNOSA, MÉXICO</p>
+            <div class="footer-bottom-links">
+                <a href="#">PRIVACIDAD</a>
+                <a href="#">COOKIES</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-item, .package-card, .location-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header scroll effect
+        let lastScroll = 0;
+        const header = document.querySelector('.header');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.08)';
+                header.style.padding = '20px 60px';
+            } else {
+                header.style.boxShadow = 'none';
+                header.style.padding = '25px 60px';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Floating button scroll to top
+        document.querySelector('.floating-btn').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        console.log('🌺 Aloha SPA - Website Loaded');
+    </script>
+</body>
+</html>
