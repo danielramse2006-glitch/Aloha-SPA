@@ -1523,7 +1523,8 @@
                 if (res.ok) {
                     const data = await res.json();
                     if (data.debug_code) {
-                        console.log('OTP:', data.debug_code);
+                        console.log('DEBUG: El correo falló pero aquí está el código:', data.debug_code);
+                        console.log('ERROR DETALLE:', data.details);
                     }
                     document.getElementById('step1').style.display = 'none';
                     document.getElementById('step2').style.display = 'flex';
