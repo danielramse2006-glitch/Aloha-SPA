@@ -1027,6 +1027,31 @@
         .phone-group input {
             flex: 1;
         }
+
+        /* Estilos Responsivos para Celular */
+        @media (max-width: 600px) {
+            .booking-modal {
+                padding: 30px 20px !important;
+                width: 90% !important;
+                border-radius: 25px !important;
+            }
+            .booking-modal h2 {
+                font-size: 24px !important;
+                text-align: center;
+            }
+            .booking-form input, .booking-form select, .btn-send {
+                padding: 15px !important;
+                font-size: 16px !important; /* Evita zoom molesto en iPhone */
+            }
+            #otpCode {
+                letter-spacing: 5px !important;
+                font-size: 20px !important;
+            }
+            #step1 div {
+                flex-direction: column;
+                gap: 15px !important;
+            }
+        }
     </style>
 </head>
 <body>

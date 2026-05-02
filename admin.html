@@ -54,6 +54,27 @@
         .refresh-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
         
         select { padding: 8px; border-radius: 8px; border: 1px solid #eee; background: #fff; cursor: pointer; }
+
+        /* Responsividad para Admin (Celular) */
+        @media (max-width: 600px) {
+            .container { margin: 10px auto; padding: 10px; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            
+            table, thead, tbody, th, td, tr { display: block; }
+            thead tr { position: absolute; top: -9999px; left: -9999px; }
+            tr { border: 1px solid #eee; border-radius: 15px; margin-bottom: 15px; padding: 10px; background: #fff; }
+            td { border: none; position: relative; padding-left: 50% !important; text-align: right !important; }
+            td:before {
+                position: absolute; top: 15px; left: 15px; width: 45%; padding-right: 10px; 
+                white-space: nowrap; font-weight: 600; color: #888; text-align: left;
+            }
+            td:nth-of-type(1):before { content: "FECHA"; }
+            td:nth-of-type(2):before { content: "CLIENTE"; }
+            td:nth-of-type(3):before { content: "SERVICIO"; }
+            td:nth-of-type(4):before { content: "ESTADO"; }
+            td:nth-of-type(5):before { content: "ACCIONES"; }
+        }
     </style>
 </head>
 <body>
