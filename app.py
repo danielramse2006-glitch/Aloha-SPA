@@ -134,6 +134,14 @@ def update_status(id):
 
 with app.app_context():
     db.create_all()
+    # Migración manual para añadir columna phone si no existe
+    try:
+        from sqlalchemy import text
+        db.session.execute(text('ALTER TABLE appointment ADD COLUMN IF NOT EXISTS phone VARCHAR(20)'))
+        db.session.commit()
+    except Exception as e:
+        print(f"Nota: Columna phone ya existe o error controlado: {e}")
+        db.session.rollback()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
