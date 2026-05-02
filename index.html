@@ -935,9 +935,114 @@
                 text-align: center;
             }
         }
+        /* Modal Booking */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(61, 36, 36, 0.4);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+        }
+
+        .booking-modal {
+            background: var(--white);
+            width: 95%;
+            max-width: 600px;
+            border-radius: 40px;
+            padding: 60px;
+            position: relative;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+            animation: modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .booking-modal h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 20px; color: var(--dark-brown); }
+        .booking-form { display: flex; flex-direction: column; gap: 15px; }
+        .booking-form input, .booking-form select {
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+        }
+        .btn-send {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-send:hover { opacity: 0.9; transform: translateY(-2px); }
+        .step-2 { display: none; }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        .phone-group {
+            display: flex;
+            gap: 10px;
+        }
+        .phone-group select {
+            flex: 0 0 100px;
+        }
+        .phone-group input {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
+    <!-- Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="booking-modal">
+            <span class="close-modal">&times;</span>
+            <h2>Reserva tu Cita</h2>
+            <form class="booking-form" id="bookingForm" onsubmit="event.preventDefault()">
+                <div id="step1" style="display: flex; flex-direction: column; gap: 20px;">
+                    <input type="text" id="name" placeholder="Nombre completo" required>
+                    <select id="service" required>
+                        <option value="">Selecciona un servicio</option>
+                        <option value="Depilación Bozo">Depilación Bozo - $1,100</option>
+                        <option value="Depilación Cara">Depilación Cara - $1,800</option>
+                        <option value="Depilación Axila">Depilación Axila - $1,400</option>
+                        <option value="Cuerpo Completo">Cuerpo Completo - $11,990</option>
+                        <option value="Masaje Relajante">Masaje Relajante</option>
+                    </select>
+                    <div style="display: flex; gap: 15px;">
+                        <input type="date" id="date" required style="flex: 1;">
+                        <input type="time" id="time" required style="flex: 1;">
+                    </div>
+                    <input type="email" id="email" placeholder="Correo electrónico" required>
+                    <button type="button" class="btn-send" onclick="sendOTP()">Enviar Código al Correo</button>
+                </div>
+
+                <div id="step2" class="step-2" style="display: none; flex-direction: column; gap: 20px;">
+                    <p style="margin-bottom: 5px; color: #666; font-size: 14px;">Ingresa el código de 6 dígitos enviado a tu correo:</p>
+                    <input type="text" id="otpCode" placeholder="Código de 6 dígitos" maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 10px; font-weight: 700;">
+                    
+                    <div id="resendContainer" style="text-align: center; font-size: 13px; color: #999;">
+                        ¿No recibiste el código? <br>
+                        <button type="button" id="btnResend" onclick="sendOTP()" disabled style="background: none; border: none; color: #e8004f; cursor: not-allowed; opacity: 0.5; font-weight: 600; margin-top: 5px;">Reenviar código (<span id="timer">60</span>s)</button>
+                    </div>
+
+                    <button type="button" class="btn-send" onclick="verifyAndBook()">Confirmar Cita</button>
+                    <button type="button" style="background: none; border: none; color: #999; margin-top: 5px; cursor: pointer; font-size: 13px;" onclick="resetForm()">Regresar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Floating Button -->
     <div class="floating-btn">N</div>
 
@@ -1273,62 +1378,151 @@
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#contacto' || this.textContent.toLowerCase().includes('reservar')) return; 
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(targetId);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
+        // Intersection Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('animate');
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.service-item, .package-card, .location-card').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.service-item, .package-card, .location-card').forEach(el => observer.observe(el));
 
-        // Header scroll effect
-        let lastScroll = 0;
+        // Header scroll
         const header = document.querySelector('.header');
-
         window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
+            if (window.pageYOffset > 100) {
                 header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.08)';
                 header.style.padding = '20px 60px';
             } else {
                 header.style.boxShadow = 'none';
                 header.style.padding = '25px 60px';
             }
-            
-            lastScroll = currentScroll;
         });
 
-        // Floating button scroll to top
+        // Floating btn
         document.querySelector('.floating-btn').addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Booking Logic
+        const modal = document.getElementById('bookingModal');
+        const openBtns = document.querySelectorAll('.btn-reservar, .btn-primary');
+        const API_URL = window.location.origin + '/api';
+        
+        let failedAttempts = 0;
+        let timerInterval = null;
+
+        function startTimer() {
+            let timeLeft = 60;
+            const btnResend = document.getElementById('btnResend');
+            const timerText = document.getElementById('timer');
+            
+            btnResend.disabled = true;
+            btnResend.style.cursor = 'not-allowed';
+            btnResend.style.opacity = '0.5';
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerText.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    btnResend.disabled = false;
+                    btnResend.style.cursor = 'pointer';
+                    btnResend.style.opacity = '1';
+                    btnResend.innerHTML = 'Reenviar código ahora';
+                }
+            }, 1000);
+        }
+
+        function resetForm() {
+            document.getElementById('bookingForm').reset();
+            document.getElementById('step1').style.display = 'flex';
+            document.getElementById('step2').style.display = 'none';
+            failedAttempts = 0;
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const href = btn.getAttribute('href');
+                if (href === '#contacto' || btn.textContent.toLowerCase().includes('reservar') || btn.classList.contains('btn-primary')) {
+                    e.preventDefault();
+                    modal.style.display = 'flex';
+                }
             });
         });
 
-        console.log('🌺 Aloha SPA - Website Loaded');
+        document.querySelector('.close-modal').onclick = () => {
+            modal.style.display = 'none';
+            resetForm();
+        };
+
+        async function sendOTP() {
+            const email = document.getElementById('email').value;
+            
+            if (!email) return alert('Ingresa tu correo');
+            try {
+                const res = await fetch(`${API_URL}/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.debug_code) {
+                        console.log('OTP:', data.debug_code);
+                    }
+                    document.getElementById('step1').style.display = 'none';
+                    document.getElementById('step2').style.display = 'flex';
+                    startTimer();
+                } else alert('Error al enviar código');
+            } catch (err) { alert('Error de servidor'); }
+        }
+
+        async function verifyAndBook() {
+            const code = document.getElementById('otpCode').value;
+            const email = document.getElementById('email').value;
+            
+            const appointment = {
+                name: document.getElementById('name').value,
+                service: document.getElementById('service').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value
+            };
+            try {
+                const res = await fetch(`${API_URL}/verify-and-book`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code, appointment })
+                });
+                if (res.ok) {
+                    alert('¡Cita agendada!');
+                    modal.style.display = 'none';
+                    resetForm();
+                } else {
+                    failedAttempts++;
+                    if (failedAttempts >= 3) {
+                        alert('Has superado el límite de intentos. Por favor, intenta de nuevo desde el principio.');
+                        resetForm();
+                    } else {
+                        alert(`Código incorrecto. Te quedan ${3 - failedAttempts} intentos.`);
+                    }
+                }
+            } catch (err) { alert('Error al agendar'); }
+        }
     </script>
 </body>
 </html>

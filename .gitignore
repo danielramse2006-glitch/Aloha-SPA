@@ -1,0 +1,25 @@
+# Variables de entorno (NUNCA subir esto a GitHub)
+.env
+
+# Base de datos local
+*.db
+*.sqlite
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/

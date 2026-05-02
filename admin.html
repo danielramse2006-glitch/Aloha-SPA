@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Aloha SPA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E8004F;
+            --dark: #3D2424;
+            --bg: #F8F8F8;
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        h1 { color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #fafafa; font-weight: 600; color: var(--dark); }
+        select { padding: 5px; border-radius: 5px; border: 1px solid #ddd; }
+        .refresh-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; float: right; }
+        
+        #loginSection { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--dark); display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .login-box { background: white; padding: 40px; border-radius: 20px; text-align: center; }
+        .login-box input { padding: 15px; margin: 10px 0; width: 250px; border-radius: 10px; border: 1px solid #ddd; }
+        .login-box button { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="loginSection">
+        <div class="login-box">
+            <h2>Aloha Admin</h2>
+            <input type="password" id="adminKey" placeholder="Clave de acceso">
+            <br>
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainSection" style="display: none;">
+        <button class="refresh-btn" onclick="loadAppointments()">Actualizar</button>
+        <h1>Gestión de Citas</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha/Hora</th>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Email</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentsTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin + '/api';
+        let CURRENT_KEY = '';
+
+        function login() {
+            const key = document.getElementById('adminKey').value;
+            if (!key) return alert('Ingresa la clave');
+            CURRENT_KEY = key;
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainSection').style.display = 'block';
+            loadAppointments();
+        }
+
+        async function loadAppointments() {
+            try {
+                const response = await fetch(`${API_URL}/admin/appointments`, {
+                    headers: { 'X-API-KEY': CURRENT_KEY }
+                });
+                if (!response.ok) throw new Error('Clave incorrecta');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('appointmentsTable');
+                tbody.innerHTML = '';
+                
+                data.forEach(app => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${app.date} <br><small>${app.time}</small></td>
+                        <td>${app.name}</td>
+                        <td>${app.service}</td>
+                        <td>${app.email}</td>
+                        <td>
+                            <select onchange="updateStatus(${app.id}, this.value)">
+                                <option value="Pendiente" ${app.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                                <option value="Confirmada" ${app.status === 'Confirmada' ? 'selected' : ''}>Confirmada</option>
+                                <option value="Cancelada" ${app.status === 'Cancelada' ? 'selected' : ''}>Cancelada</option>
+                            </select>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                alert(err.message);
+                document.getElementById('loginSection').style.display = 'flex';
+                document.getElementById('mainSection').style.display = 'none';
+            }
+        }
+
+        async function updateStatus(id, status) {
+            await fetch(`${API_URL}/admin/appointments/${id}`, {
+                method: 'PATCH',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-API-KEY': CURRENT_KEY
+                },
+                body: JSON.stringify({ status })
+            });
+        }
+    </script>
+</body>
+</html>
