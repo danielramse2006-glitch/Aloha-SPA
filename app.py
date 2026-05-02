@@ -108,9 +108,9 @@ def send_otp():
         msg.attach(MIMEText(body_html, 'html'))
         
         if MAIL_PORT == 465:
-            server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT)
+            server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=10)
         else:
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=10)
             server.starttls()
             
         server.login(MAIL_USERNAME, MAIL_PASSWORD)
