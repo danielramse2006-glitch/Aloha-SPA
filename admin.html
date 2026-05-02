@@ -131,34 +131,40 @@
                 const tbody = document.getElementById('appointmentsTable');
                 tbody.innerHTML = '';
                 
-                data.forEach(app => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <div style="font-weight: 600;">${app.date}</div>
-                            <div style="font-size: 12px; color: #888;">${app.time}</div>
-                        </td>
-                        <td>
-                            <div style="font-weight: 600;">${app.name}</div>
-                            <div style="font-size: 12px; color: #888;">${app.email}</div>
-                        </td>
-                        <td>${app.service}</td>
-                        <td>
-                            <select onchange="updateStatus(${app.id}, this.value)" class="status-pill status-${app.status}">
-                                <option value="pendiente" ${app.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
-                                <option value="confirmada" ${app.status === 'confirmada' ? 'selected' : ''}>Confirmada</option>
-                                <option value="cancelada" ${app.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
-                            </select>
-                        </td>
-                        <td>
-                            <a href="https://wa.me/?text=Hola%20${encodeURIComponent(app.name)}!%20Te%20contacto%20de%20Aloha%20SPA%20por%20tu%20cita%20de%20${encodeURIComponent(app.service)}." 
-                               class="btn-ws" target="_blank">
-                                📱 WhatsApp
-                            </a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                    data.forEach(app => {
+                        const tr = document.createElement('tr');
+                        // Formatear número para WhatsApp (quitar espacios, +, etc)
+                        const waPhone = app.phone ? app.phone.replace(/\D/g, '') : '';
+                        
+                        tr.innerHTML = `
+                            <td>
+                                <div style="font-weight: 600;">${app.date}</div>
+                                <div style="font-size: 12px; color: #888;">${app.time}</div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 600;">${app.name}</div>
+                                <div style="font-size: 12px; color: #888;">${app.email}</div>
+                                <div style="font-size: 12px; color: var(--primary); font-weight: 600;">${app.phone || 'Sin tel.'}</div>
+                            </td>
+                            <td>${app.service}</td>
+                            <td>
+                                <select onchange="updateStatus(${app.id}, this.value)" class="status-pill status-${app.status}">
+                                    <option value="pendiente" ${app.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                                    <option value="confirmada" ${app.status === 'confirmada' ? 'selected' : ''}>Confirmada</option>
+                                    <option value="cancelada" ${app.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
+                                </select>
+                            </td>
+                            <td>
+                                ${app.phone ? `
+                                    <a href="https://wa.me/${waPhone}?text=Hola%20${encodeURIComponent(app.name)}!%20Te%20contacto%20de%20Aloha%20SPA%20por%20tu%20cita%20de%20${encodeURIComponent(app.service)}." 
+                                       class="btn-ws" target="_blank">
+                                        📱 WhatsApp
+                                    </a>
+                                ` : '---'}
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
             } catch (err) {
                 alert(err.message);
                 document.getElementById('loginSection').style.display = 'flex';

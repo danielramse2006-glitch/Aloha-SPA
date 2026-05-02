@@ -1050,6 +1050,7 @@
                         <input type="date" id="date" required style="flex: 1;">
                         <input type="time" id="time" required style="flex: 1;">
                     </div>
+                    <input type="tel" id="phone" placeholder="Teléfono / WhatsApp (ej: +52...)" required>
                     <input type="email" id="email" placeholder="Correo electrónico" required>
                     <button type="button" class="btn-send" id="btnSendOTP" onclick="sendOTP()">
                         <span class="spinner" id="spinner"></span>
@@ -1546,12 +1547,14 @@
         async function verifyAndBook() {
             const code = document.getElementById('otpCode').value;
             const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
             
             const appointment = {
                 name: document.getElementById('name').value,
                 service: document.getElementById('service').value,
                 date: document.getElementById('date').value,
-                time: document.getElementById('time').value
+                time: document.getElementById('time').value,
+                phone: phone
             };
             try {
                 const res = await fetch(`${API_URL}/verify-and-book`, {
