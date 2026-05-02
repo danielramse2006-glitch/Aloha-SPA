@@ -15,8 +15,12 @@ app = Flask(__name__)
 CORS(app)
 
 # Database Configuration
-# In Render, use the Internal/External Database URL
-db_url = os.getenv('DATABASE_URL', 'sqlite:///instance/aloha_spa.db')
+# Ensure the instance folder exists for SQLite
+instance_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance')
+if not os.path.exists(instance_path):
+    os.makedirs(instance_path)
+
+db_url = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(instance_path, "aloha_spa.db")}')
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
