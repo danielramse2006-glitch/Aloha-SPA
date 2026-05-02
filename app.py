@@ -144,10 +144,40 @@ def update_status(id):
     api_key = request.headers.get('X-API-KEY')
     if api_key != os.getenv('ADMIN_API_KEY', 'aloha-secret-123'):
         return jsonify({'error': 'No autorizado'}), 401
+    
     data = request.json
+    new_status = data.get('status')
     app_record = Appointment.query.get_or_404(id)
-    app_record.status = data.get('status', app_record.status)
+    old_status = app_record.status
+    
+    app_record.status = new_status or app_record.status
     db.session.commit()
+
+    # Si se confirma, enviar correo automático
+    if new_status == 'confirmada' and old_status != 'confirmada':
+        try:
+            resend.Emails.send({
+                "from": "Aloha SPA <onboarding@resend.dev>",
+                "to": [app_record.email],
+                "subject": "¡Cita Confirmada! - Aloha SPA",
+                "html": f"""
+                <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; border: 1px solid #f0f0f0; border-radius: 15px; text-align: center;">
+                    <h2 style="color: #e8004f;">¡Hola, {app_record.name}!</h2>
+                    <p style="font-size: 16px; color: #333;">Nos alegra informarte que tu cita ha sido <strong>confirmada</strong>.</p>
+                    <div style="background: #fafafa; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+                        <p><strong>Servicio:</strong> {app_record.service}</p>
+                        <p><strong>Fecha:</strong> {app_record.date}</p>
+                        <p><strong>Hora:</strong> {app_record.time}</p>
+                    </div>
+                    <p>¡Te esperamos para consentirte!</p>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+                    <p style="font-size: 12px; color: #aaa;">Aloha SPA - Cuidando de ti.</p>
+                </div>
+                """
+            })
+        except Exception as e:
+            print(f"Error enviando confirmación: {e}")
+
     return jsonify({'message': 'Estado actualizado'})
 
 @app.route('/api/seed', methods=['GET'])

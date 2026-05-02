@@ -10,50 +10,96 @@
             --primary: #E8004F;
             --dark: #3D2424;
             --bg: #F8F8F8;
+            --white: #FFFFFF;
+            --success: #27ae60;
+            --pending: #f39c12;
+            --danger: #e74c3c;
         }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h1 { color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #fafafa; font-weight: 600; color: var(--dark); }
-        select { padding: 5px; border-radius: 5px; border: 1px solid #ddd; }
-        .refresh-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; float: right; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
+        /* Login Styles */
         #loginSection { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: var(--dark); display: flex; justify-content: center; align-items: center; z-index: 1000;
         }
-        .login-box { background: white; padding: 40px; border-radius: 20px; text-align: center; }
-        .login-box input { padding: 15px; margin: 10px 0; width: 250px; border-radius: 10px; border: 1px solid #ddd; }
-        .login-box button { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; }
+        .login-box { background: var(--white); padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .login-box input { padding: 15px; margin: 10px 0; width: 250px; border-radius: 10px; border: 1px solid #ddd; outline: none; transition: 0.3s; }
+        .login-box input:focus { border-color: var(--primary); }
+        .login-box button { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-weight: 600; width: 100%; }
+
+        /* Main Dashboard */
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { color: var(--dark); margin: 0; font-size: 24px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #ddd; }
+        .stat-card.total { border-color: var(--dark); }
+        .stat-card.confirmed { border-color: var(--success); }
+        .stat-card.pending { border-color: var(--pending); }
+        .stat-card h3 { margin: 0; font-size: 14px; color: #888; text-transform: uppercase; }
+        .stat-card p { margin: 10px 0 0; font-size: 28px; font-weight: 600; color: var(--dark); }
+
+        .table-card { background: var(--white); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fafafa; padding: 15px; text-align: left; font-size: 13px; color: #888; text-transform: uppercase; border-bottom: 1px solid #eee; }
+        td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        
+        .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .status-pendiente { background: #fff3e0; color: #e65100; }
+        .status-confirmada { background: #e8f5e9; color: #2e7d32; }
+        .status-cancelada { background: #ffebee; color: #c62828; }
+
+        .btn-ws { background: #25d366; color: white; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+        .refresh-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        
+        select { padding: 8px; border-radius: 8px; border: 1px solid #eee; background: #fff; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="loginSection">
         <div class="login-box">
-            <h2>Aloha Admin</h2>
+            <h2 style="color: var(--dark); margin-bottom: 20px;">Aloha Admin</h2>
             <input type="password" id="adminKey" placeholder="Clave de acceso">
-            <br>
-            <button onclick="login()">Entrar</button>
+            <button onclick="login()">ENTRAR AL PANEL</button>
         </div>
     </div>
 
     <div class="container" id="mainSection" style="display: none;">
-        <button class="refresh-btn" onclick="loadAppointments()">Actualizar</button>
-        <h1>Gestión de Citas</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha/Hora</th>
-                    <th>Cliente</th>
-                    <th>Servicio</th>
-                    <th>Email</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody id="appointmentsTable"></tbody>
-        </table>
+        <div class="header">
+            <h1>Gestión de Citas - Aloha SPA</h1>
+            <button class="refresh-btn" onclick="loadAppointments()">Actualizar Datos</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <h3>Total Citas</h3>
+                <p id="statTotal">0</p>
+            </div>
+            <div class="stat-card pending">
+                <h3>Pendientes</h3>
+                <p id="statPending">0</p>
+            </div>
+            <div class="stat-card confirmed">
+                <h3>Confirmadas</h3>
+                <p id="statConfirmed">0</p>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Cliente</th>
+                        <th>Servicio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentsTable"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
@@ -74,25 +120,41 @@
                 const response = await fetch(`${API_URL}/admin/appointments`, {
                     headers: { 'X-API-KEY': CURRENT_KEY }
                 });
-                if (!response.ok) throw new Error('Clave incorrecta');
+                if (!response.ok) throw new Error('Clave incorrecta o sesión expirada');
                 const data = await response.json();
                 
+                // Actualizar Stats
+                document.getElementById('statTotal').textContent = data.length;
+                document.getElementById('statPending').textContent = data.filter(a => a.status === 'pendiente').length;
+                document.getElementById('statConfirmed').textContent = data.filter(a => a.status === 'confirmada').length;
+
                 const tbody = document.getElementById('appointmentsTable');
                 tbody.innerHTML = '';
                 
                 data.forEach(app => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${app.date} <br><small>${app.time}</small></td>
-                        <td>${app.name}</td>
-                        <td>${app.service}</td>
-                        <td>${app.email}</td>
                         <td>
-                            <select onchange="updateStatus(${app.id}, this.value)">
-                                <option value="Pendiente" ${app.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-                                <option value="Confirmada" ${app.status === 'Confirmada' ? 'selected' : ''}>Confirmada</option>
-                                <option value="Cancelada" ${app.status === 'Cancelada' ? 'selected' : ''}>Cancelada</option>
+                            <div style="font-weight: 600;">${app.date}</div>
+                            <div style="font-size: 12px; color: #888;">${app.time}</div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 600;">${app.name}</div>
+                            <div style="font-size: 12px; color: #888;">${app.email}</div>
+                        </td>
+                        <td>${app.service}</td>
+                        <td>
+                            <select onchange="updateStatus(${app.id}, this.value)" class="status-pill status-${app.status}">
+                                <option value="pendiente" ${app.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                                <option value="confirmada" ${app.status === 'confirmada' ? 'selected' : ''}>Confirmada</option>
+                                <option value="cancelada" ${app.status === 'cancelada' ? 'selected' : ''}>Cancelada</option>
                             </select>
+                        </td>
+                        <td>
+                            <a href="https://wa.me/?text=Hola%20${encodeURIComponent(app.name)}!%20Te%20contacto%20de%20Aloha%20SPA%20por%20tu%20cita%20de%20${encodeURIComponent(app.service)}." 
+                               class="btn-ws" target="_blank">
+                                📱 WhatsApp
+                            </a>
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -105,14 +167,22 @@
         }
 
         async function updateStatus(id, status) {
-            await fetch(`${API_URL}/admin/appointments/${id}`, {
-                method: 'PATCH',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'X-API-KEY': CURRENT_KEY
-                },
-                body: JSON.stringify({ status })
-            });
+            try {
+                const res = await fetch(`${API_URL}/admin/appointments/${id}`, {
+                    method: 'PATCH',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': CURRENT_KEY
+                    },
+                    body: JSON.stringify({ status })
+                });
+                if (res.ok && status === 'confirmada') {
+                    alert('¡Cita confirmada! Correo enviado a la clienta.');
+                }
+                loadAppointments();
+            } catch (err) {
+                alert('Error al actualizar estado');
+            }
         }
     </script>
 </body>
