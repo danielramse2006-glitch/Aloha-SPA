@@ -971,16 +971,43 @@
             font-family: inherit;
         }
         .btn-send {
-            background: var(--primary-pink);
-            color: white;
+            background: var(--dark-brown);
+            color: var(--white);
+            padding: 22px;
             border: none;
-            padding: 15px;
-            border-radius: 12px;
+            border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
-        .btn-send:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .btn-send:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
         .step-2 { display: none; }
         .close-modal {
             position: absolute;
@@ -1024,7 +1051,10 @@
                         <input type="time" id="time" required style="flex: 1;">
                     </div>
                     <input type="email" id="email" placeholder="Correo electrónico" required>
-                    <button type="button" class="btn-send" onclick="sendOTP()">Enviar Código al Correo</button>
+                    <button type="button" class="btn-send" id="btnSendOTP" onclick="sendOTP()">
+                        <span class="spinner" id="spinner"></span>
+                        <span id="btnText">Enviar Código al Correo</span>
+                    </button>
                 </div>
 
                 <div id="step2" class="step-2" style="display: none; flex-direction: column; gap: 20px;">
@@ -1472,14 +1502,24 @@
 
         async function sendOTP() {
             const email = document.getElementById('email').value;
-            
-            if (!email) return alert('Ingresa tu correo');
+            if (!email) return alert('Ingresa un correo');
+
+            const btn = document.getElementById('btnSendOTP');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btnText');
+
+            // Show loading state
+            btn.disabled = true;
+            spinner.style.display = 'block';
+            btnText.textContent = 'Enviando...';
+
             try {
                 const res = await fetch(`${API_URL}/send-otp`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
                 });
+
                 if (res.ok) {
                     const data = await res.json();
                     if (data.debug_code) {
@@ -1488,8 +1528,18 @@
                     document.getElementById('step1').style.display = 'none';
                     document.getElementById('step2').style.display = 'flex';
                     startTimer();
-                } else alert('Error al enviar código');
-            } catch (err) { alert('Error de servidor'); }
+                } else {
+                    const errData = await res.json();
+                    alert('Error: ' + (errData.details || 'Error al enviar código'));
+                }
+            } catch (err) { 
+                alert('Error de servidor o conexión'); 
+            } finally {
+                // Restore button state
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Enviar Código al Correo';
+            }
         }
 
         async function verifyAndBook() {
