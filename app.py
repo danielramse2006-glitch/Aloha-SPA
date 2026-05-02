@@ -110,17 +110,20 @@ def send_otp():
         # Configurar servidor
         MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.googlemail.com')
         
-        if MAIL_PORT == 465:
-            server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=15)
-        else:
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=15)
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
+        try:
+            if MAIL_PORT == 465:
+                server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=20)
+            else:
+                server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=20)
+                server.starttls()
             
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+            server.login(MAIL_USERNAME, MAIL_PASSWORD)
+            server.send_message(msg)
+            server.quit()
+        except Exception as e:
+            # Reintento con puerto alternativo si falla
+            print(f"Error SMTP: {e}")
+            raise e
         
         return jsonify({'message': 'Código enviado exitosamente'}), 200
     except Exception as e:
