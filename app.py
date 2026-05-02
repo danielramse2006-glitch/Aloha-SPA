@@ -195,6 +195,21 @@ def update_status(id):
     db.session.commit()
     return jsonify({'message': 'Estado actualizado'})
 
+@app.route('/api/seed', methods=['GET'])
+def seed_db():
+    try:
+        test_apps = [
+            Appointment(name="Lucía García", email="lucia.test@gmail.com", service="Depilación Bozo", date="2026-05-20", time="10:00", status="pendiente"),
+            Appointment(name="María Rodríguez", email="maria.spa@hotmail.com", service="Cuerpo Completo", date="2026-05-21", time="14:30", status="confirmada"),
+            Appointment(name="Sofía López", email="sofia.l@yahoo.com", service="Masaje Relajante", date="2026-05-22", time="16:00", status="pendiente")
+        ]
+        for a in test_apps:
+            db.session.add(a)
+        db.session.commit()
+        return jsonify({'message': 'Base de datos poblada con 3 citas de prueba. Revisa el /admin'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 with app.app_context():
     db.create_all()
 
