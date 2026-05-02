@@ -107,11 +107,16 @@ def send_otp():
         """
         msg.attach(MIMEText(body_html, 'html'))
         
+        # Configurar servidor
+        MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.googlemail.com')
+        
         if MAIL_PORT == 465:
-            server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=10)
+            server = smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, timeout=15)
         else:
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=10)
+            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT, timeout=15)
+            server.ehlo()
             server.starttls()
+            server.ehlo()
             
         server.login(MAIL_USERNAME, MAIL_PASSWORD)
         server.send_message(msg)
